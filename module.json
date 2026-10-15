@@ -1,0 +1,38 @@
+{
+  "id": "dc20-action-points",
+  "title": "DC20 Action Points",
+  "description": "System-agnostic, manual Action Point tracking inside the Combat Tracker. Check off spent AP per combatant, set individual Max AP, and pips reset automatically when a combatant's turn starts.",
+  "version": "1.0.0",
+  "url": "https://github.com/Manufanki/dc20-action-points",
+  "manifest": "https://github.com/Manufanki/dc20-action-points/releases/latest/download/module.json",
+  "download": "https://github.com/Manufanki/dc20-action-points/releases/download/v1.0.0/module.zip",
+  "bugs": "https://github.com/Manufanki/dc20-action-points/issues",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Manufanki",
+      "url": "https://github.com/Manufanki"
+    }
+  ],
+  "esmodules": [
+    "scripts/main.js"
+  ],
+  "styles": [
+    "styles/ap-tracker.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "lang/de.json"
+    }
+  ]
+}

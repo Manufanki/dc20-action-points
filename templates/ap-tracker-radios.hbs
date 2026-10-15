@@ -1,0 +1,29 @@
+<div class="dc20ap {{#unless editable}}dc20ap-readonly{{/unless}}" data-combatant-id="{{combatantId}}">
+  <div class="dc20ap-pips" role="group" aria-label="{{localize 'DC20AP.Label'}}">
+    {{#each pips}}
+    <label class="dc20ap-pip" data-tooltip="{{localize 'DC20AP.Pip' n=this.index}}">
+      <input class="dc20ap-pip-input" type="checkbox" data-pip="{{this.index}}" {{checked this.spent}} {{disabled ../readonly}}>
+      <span class="dc20ap-dot"></span>
+    </label>
+    {{/each}}
+  </div>
+  <div class="dc20ap-summary">
+    <span class="dc20ap-remaining" data-tooltip="{{localize 'DC20AP.Remaining'}}">{{remaining}}</span>
+    <span class="dc20ap-sep">/</span>
+    {{#if editable}}
+    <input class="dc20ap-max" type="number" min="0" max="{{limit}}" step="1"
+           value="{{maxFlag}}" placeholder="{{defaultMax}}"
+           data-tooltip="{{localize 'DC20AP.MaxHint'}}" aria-label="{{localize 'DC20AP.Max'}}">
+    {{else}}
+    <span class="dc20ap-max-static">{{max}}</span>
+    {{/if}}
+    {{#if isLinked}}
+    <i class="fa-solid fa-link dc20ap-linked" data-tooltip="{{localize 'DC20AP.Linked'}}"></i>
+    {{/if}}
+  </div>
+  {{#if canDuplicate}}
+  <button type="button" class="dc20ap-duplicate" data-tooltip="{{localize 'DC20AP.Duplicate'}}" aria-label="{{localize 'DC20AP.Duplicate'}}">
+    <i class="fa-solid fa-clone"></i>
+  </button>
+  {{/if}}
+</div>

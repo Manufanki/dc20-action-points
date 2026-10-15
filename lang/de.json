@@ -1,0 +1,17 @@
+{
+  "DC20AP": {
+    "Label": "Aktionspunkte",
+    "Pip": "Aktionspunkt {n}",
+    "Remaining": "Verbleibende AP",
+    "Max": "Max. AP",
+    "MaxHint": "Max. AP für diesen Kampfteilnehmer (leer lassen für Standardwert)",
+    "Duplicate": "Weitere Initiative für diesen Kampfteilnehmer hinzufügen (teilt TP und AP)",
+    "Linked": "Verknüpft: teilt TP und AP mit dem ursprünglichen Kampfteilnehmer",
+    "Settings": {
+      "DefaultMax": {
+        "Name": "Standard Max. AP",
+        "Hint": "Maximale Aktionspunkte für Kampfteilnehmer ohne individuellen Wert."
+      }
+    }
+  }
+}

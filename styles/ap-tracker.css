@@ -1,0 +1,139 @@
+.dc20ap {
+  --dc20ap-size: 12px;
+  --dc20ap-accent: var(--color-warm-2, #ee9b3a);
+  --dc20ap-border: var(--color-text-secondary, #9f9275);
+  --dc20ap-text: var(--color-text-primary, #e7d1b1);
+
+  display: flex;
+  flex: 0 0 100%;
+  order: 99;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 2px 0 2px var(--dc20ap-indent, 40px);
+  font-size: var(--font-size-11, 11px);
+  line-height: 1;
+  color: var(--dc20ap-text);
+}
+
+/* Let the row wrap so the AP block sits on its own line below the existing row content. */
+li.combatant:has(> .dc20ap) {
+  flex-wrap: wrap;
+}
+
+.dc20ap-pips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.dc20ap-pip {
+  position: relative;
+  display: inline-flex;
+  width: var(--dc20ap-size);
+  height: var(--dc20ap-size);
+  margin: 0;
+  cursor: pointer;
+}
+
+.dc20ap-readonly .dc20ap-pip {
+  cursor: default;
+}
+
+.dc20ap-pip input.dc20ap-pip-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.dc20ap-dot {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--dc20ap-border);
+  border-radius: 50%;
+  background: var(--dc20ap-accent);
+  box-shadow: 0 0 3px var(--dc20ap-accent);
+  transition: background-color 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  pointer-events: none;
+}
+
+/* Checked = spent */
+.dc20ap-pip input:checked + .dc20ap-dot {
+  background: transparent;
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+.dc20ap:not(.dc20ap-readonly) .dc20ap-pip:hover .dc20ap-dot {
+  box-shadow: 0 0 5px var(--color-shadow-primary, #ff6400);
+}
+
+.dc20ap-pip input:focus-visible + .dc20ap-dot {
+  outline: 1px solid var(--color-border-highlight, #ff6400);
+  outline-offset: 1px;
+}
+
+.dc20ap-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.dc20ap-remaining {
+  font-weight: bold;
+}
+
+.dc20ap-sep {
+  opacity: 0.6;
+}
+
+.dc20ap-linked {
+  margin-left: 4px;
+  font-size: 0.9em;
+  opacity: 0.6;
+}
+
+.dc20ap button.dc20ap-duplicate {
+  flex: 0 0 auto;
+  margin: 0 2px 0 auto;
+  width: 18px;
+  height: 18px;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  font-size: 0.95em;
+  line-height: 1;
+  color: var(--dc20ap-text);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.dc20ap button.dc20ap-duplicate:hover,
+.dc20ap button.dc20ap-duplicate:focus-visible {
+  opacity: 1;
+  text-shadow: 0 0 5px var(--color-shadow-primary, #ff6400);
+}
+
+.dc20ap input.dc20ap-max {
+  width: 2.2em;
+  height: 1.4em;
+  padding: 0 2px;
+  font-size: inherit;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.dc20ap input.dc20ap-max::-webkit-inner-spin-button,
+.dc20ap input.dc20ap-max::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

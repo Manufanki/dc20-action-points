@@ -1,0 +1,17 @@
+{
+  "DC20AP": {
+    "Label": "Action Points",
+    "Pip": "Action Point {n}",
+    "Remaining": "Remaining AP",
+    "Max": "Max AP",
+    "MaxHint": "Max AP for this combatant (leave empty to use the default)",
+    "Duplicate": "Add another initiative for this combatant (shares HP and AP)",
+    "Linked": "Linked: shares HP and AP with the original combatant",
+    "Settings": {
+      "DefaultMax": {
+        "Name": "Default Max AP",
+        "Hint": "Max Action Points for combatants without an individual value."
+      }
+    }
+  }
+}
