@@ -63,6 +63,7 @@ export function getAPSource(combatant) {
 }
 
 export async function resetCombatant(combatant) {
+  if (combatant.getFlag(MODULE_ID, "linkedTo")) return;
   const source = getAPSource(combatant);
   if (!source.getFlag(MODULE_ID, "spent")) return;
   return source.setFlag(MODULE_ID, "spent", 0);
