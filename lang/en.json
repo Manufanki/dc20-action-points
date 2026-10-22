@@ -7,10 +7,35 @@
     "MaxHint": "Max AP for this combatant (leave empty to use the default)",
     "Duplicate": "Add another initiative for this combatant (shares HP and AP)",
     "Linked": "Linked: shares HP and AP with the original combatant",
+    "Move": "Movement",
+    "OverSpeedMove": "Moving beyond speed",
+    "Notifications": {
+      "NotEnough": "{name}: {action} costs {cost} AP, but only {remaining} AP are left."
+    },
     "Settings": {
       "DefaultMax": {
         "Name": "Default Max AP",
         "Hint": "Max Action Points for combatants without an individual value."
+      },
+      "AutoConsume": {
+        "Name": "Consume AP automatically",
+        "Hint": "Spend AP automatically when a combatant uses an action or bonus action (D&D 5e), or moves during its own turn."
+      },
+      "ActionCost": {
+        "Name": "AP cost: Action",
+        "Hint": "AP spent when an activity with activation type Action is used."
+      },
+      "BonusActionCost": {
+        "Name": "AP cost: Bonus Action",
+        "Hint": "AP spent when an activity with activation type Bonus Action is used."
+      },
+      "MoveCost": {
+        "Name": "AP cost: Movement",
+        "Hint": "AP spent as soon as a combatant starts moving during its own turn (once per turn)."
+      },
+      "OverSpeedCost": {
+        "Name": "AP cost: Moving beyond speed",
+        "Hint": "Additional AP spent once per turn when the total movement in a combatant's turn exceeds its speed."
       }
     }
   }

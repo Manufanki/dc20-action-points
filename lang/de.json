@@ -7,10 +7,35 @@
     "MaxHint": "Max. AP für diesen Kampfteilnehmer (leer lassen für Standardwert)",
     "Duplicate": "Weitere Initiative für diesen Kampfteilnehmer hinzufügen (teilt TP und AP)",
     "Linked": "Verknüpft: teilt TP und AP mit dem ursprünglichen Kampfteilnehmer",
+    "Move": "Bewegung",
+    "OverSpeedMove": "Bewegung über die Geschwindigkeit hinaus",
+    "Notifications": {
+      "NotEnough": "{name}: {action} kostet {cost} AP, es sind aber nur noch {remaining} AP übrig."
+    },
     "Settings": {
       "DefaultMax": {
         "Name": "Standard Max. AP",
         "Hint": "Maximale Aktionspunkte für Kampfteilnehmer ohne individuellen Wert."
+      },
+      "AutoConsume": {
+        "Name": "AP automatisch verbrauchen",
+        "Hint": "AP automatisch abziehen, wenn ein Kampfteilnehmer eine Aktion oder Bonusaktion nutzt (D&D 5e) oder sich in seinem Zug bewegt."
+      },
+      "ActionCost": {
+        "Name": "AP-Kosten: Aktion",
+        "Hint": "AP, die beim Nutzen einer Aktivität mit Aktivierungsart Aktion verbraucht werden."
+      },
+      "BonusActionCost": {
+        "Name": "AP-Kosten: Bonusaktion",
+        "Hint": "AP, die beim Nutzen einer Aktivität mit Aktivierungsart Bonusaktion verbraucht werden."
+      },
+      "MoveCost": {
+        "Name": "AP-Kosten: Bewegung",
+        "Hint": "AP, die verbraucht werden, sobald sich ein Kampfteilnehmer in seinem Zug bewegt (einmal pro Zug)."
+      },
+      "OverSpeedCost": {
+        "Name": "AP-Kosten: Bewegung über Geschwindigkeit",
+        "Hint": "Zusätzliche AP, die einmal pro Zug verbraucht werden, wenn die Bewegung im Zug die Geschwindigkeit übersteigt."
       }
     }
   }
