@@ -1,5 +1,5 @@
 import { MODULE_ID, TEMPLATE, registerSettings, injectTracker, resetCombatant } from "./ap-tracker.js";
-import { registerAutomationSettings, onPostUseActivity, onMoveToken, resetMovement } from "./automation.js";
+import { registerAutomationSettings, onPostUseActivity, onMoveToken, onCreateChatMessage, resetMovement } from "./automation.js";
 
 Hooks.once("init", () => {
   registerSettings();
@@ -10,6 +10,7 @@ Hooks.once("init", () => {
 
 Hooks.on("dnd5e.postUseActivity", onPostUseActivity);
 Hooks.on("moveToken", onMoveToken);
+Hooks.on("createChatMessage", onCreateChatMessage);
 
 Hooks.on("renderCombatTracker", (app, html) => {
   injectTracker(app, html);

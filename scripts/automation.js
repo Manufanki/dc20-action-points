@@ -4,6 +4,10 @@ const ACTIVATION_COST_SETTINGS = { action: "actionCost", bonus: "bonusActionCost
 // Repositioning through the token config, pasting, or undoing a move is not movement a creature pays for.
 const IGNORED_MOVE_METHODS = new Set(["config", "paste", "undo"]);
 const FLAG = path => `flags.${MODULE_ID}.${path}`;
+const COMBAT_SYSTEM_ID = "dc20-combat-system";
+// Dice count rolled by DC20 Combat System -> cost setting; 2d20 uses advantageCost.
+const TIER_COST_SETTINGS = { 3: "doubleAdvantageCost", 4: "tripleAdvantageCost" };
+let updateQueue = Promise.resolve();
 
 export function registerAutomationSettings() {
   game.settings.register(MODULE_ID, "autoConsume", {
@@ -18,6 +22,10 @@ export function registerAutomationSettings() {
   registerCostSetting("bonusActionCost", "DC20AP.Settings.BonusActionCost", 1);
   registerCostSetting("moveCost", "DC20AP.Settings.MoveCost", 1);
   registerCostSetting("extraMoveCost", "DC20AP.Settings.OverSpeedCost", 1);
+  registerCostSetting("advantageCost", "DC20AP.Settings.AdvantageCost", 2);
+  registerCostSetting("doubleAdvantageCost", "DC20AP.Settings.DoubleAdvantageCost", 3);
+  registerCostSetting("tripleAdvantageCost", "DC20AP.Settings.TripleAdvantageCost", 4);
+  registerCostSetting("disadvantageCost", "DC20AP.Settings.DisadvantageCost", 1);
 }
 
 function registerCostSetting(key, label, defaultValue) {
@@ -53,20 +61,85 @@ function buildSpendUpdate(source, cost, label) {
   return { [FLAG("spent")]: Math.min(spent + cost, max) };
 }
 
+// Serialises AP writes so overlapping spends don't overwrite each other.
+function queueUpdate(source, { cost = 0, label = "", extra = {} } = {}) {
+  updateQueue = updateQueue
+    .then(() => {
+      const spend = cost > 0 ? buildSpendUpdate(source, cost, label) : {};
+      return source.update({ ...spend, ...extra });
+    })
+    .catch(error => console.error(`${MODULE_ID} | Failed to update AP for ${source.name}`, error));
+  return updateQueue;
+}
+
 export function onPostUseActivity(activity) {
   if (!isEnabled()) return;
   const setting = ACTIVATION_COST_SETTINGS[activity?.activation?.type];
   if (!setting) return;
+  const isAttack = activity.type === "attack";
   const cost = game.settings.get(MODULE_ID, setting);
-  if (cost <= 0) return;
+  if (cost <= 0 && !isAttack) return;
 
   const actor = activity.actor;
   const source = findSource(game.combat, { tokenId: actor?.token?.id, sceneId: actor?.token?.parent?.id, actor });
   if (!source?.isOwner) return;
 
   const label = activity.item?.name ?? activity.name;
-  void source.update(buildSpendUpdate(source, cost, label)).catch(error =>
-    console.error(`${MODULE_ID} | Failed to consume AP for ${label}`, error));
+  if (isAttack) return joinAttackActivation(source, cost, label);
+  void queueUpdate(source, { cost, label });
+}
+
+// Attack AP depends on the d20 roll's advantage state, so the activity and the roll are joined in either order.
+const ATTACK_JOIN_MS = 3000;
+let pendingActivation = null;
+let pendingRoll = null;
+
+function joinAttackActivation(source, activationCost, label) {
+  if (pendingRoll) {
+    const { source: rollSource, rollCost, timer } = pendingRoll;
+    clearTimeout(timer);
+    pendingRoll = null;
+    return spendLater(rollSource, rollCost ?? activationCost, label);
+  }
+  flushPendingActivation();
+  pendingActivation = {
+    source, cost: activationCost, label,
+    timer: setTimeout(flushPendingActivation, ATTACK_JOIN_MS)
+  };
+}
+
+function joinAttackRoll(source, { advantageCost, rollCost }) {
+  if (pendingActivation) {
+    const { source: activationSource, cost, label, timer } = pendingActivation;
+    clearTimeout(timer);
+    pendingActivation = null;
+    return spendLater(activationSource, rollCost ?? cost, label);
+  }
+  flushPendingRoll();
+  pendingRoll = {
+    source, advantageCost, rollCost,
+    timer: setTimeout(flushPendingRoll, ATTACK_JOIN_MS)
+  };
+}
+
+function flushPendingActivation() {
+  if (!pendingActivation) return;
+  const { source, cost, label, timer } = pendingActivation;
+  clearTimeout(timer);
+  pendingActivation = null;
+  spendLater(source, cost, label);
+}
+
+function flushPendingRoll() {
+  if (!pendingRoll) return;
+  const { source, advantageCost, timer } = pendingRoll;
+  clearTimeout(timer);
+  pendingRoll = null;
+  spendLater(source, advantageCost, game.i18n.localize("DC20AP.Advantage"));
+}
+
+function spendLater(source, cost, label) {
+  if (cost > 0) void queueUpdate(source, { cost, label });
 }
 
 export function onMoveToken(tokenDoc, movement, operation, user) {
@@ -108,9 +181,47 @@ export function onMoveToken(tokenDoc, movement, operation, user) {
     }
   }
 
-  if (cost > 0) Object.assign(updates, buildSpendUpdate(source, cost, labels.join(" + ")));
-  void source.update(updates).catch(error =>
-    console.error(`${MODULE_ID} | Failed to record movement for ${source.name}`, error));
+  void queueUpdate(source, { cost, label: labels.join(" + "), extra: updates });
+}
+
+export function onCreateChatMessage(message) {
+  // createChatMessage fires on every client; only the author's client spends AP.
+  if (message.author?.id !== game.userId || !isEnabled()) return;
+  const costs = getRollCosts(message);
+  if (!costs) return;
+
+  const source = findSource(game.combat, {
+    tokenId: message.speaker?.token,
+    sceneId: message.speaker?.scene,
+    actor: message.getAssociatedActor?.()
+  });
+  if (!source?.isOwner) return;
+  joinAttackRoll(source, costs);
+}
+
+// rollCost is null for a normal roll, otherwise the cost that replaces the activation cost.
+function getRollCosts(message) {
+  const combatSystemActive = Boolean(game.modules.get(COMBAT_SYSTEM_ID)?.active);
+  let hasD20 = false;
+  let advantage = false;
+  let disadvantage = false;
+  let advantageCost = 0;
+  for (const roll of message.rolls ?? []) {
+    if (!(roll instanceof CONFIG.Dice.D20Roll)) continue;
+    hasD20 = true;
+    if (roll.hasAdvantage) {
+      advantage = true;
+      const diceCount = combatSystemActive
+        ? Number(message.getFlag(COMBAT_SYSTEM_ID, "d20")?.diceCount ?? roll.dice?.[0]?.number)
+        : 2;
+      advantageCost += game.settings.get(MODULE_ID, TIER_COST_SETTINGS[diceCount] ?? "advantageCost");
+    } else if (roll.hasDisadvantage) {
+      disadvantage = true;
+    }
+  }
+  if (!hasD20) return null;
+  const disadvantageCost = disadvantage && !advantage ? game.settings.get(MODULE_ID, "disadvantageCost") : null;
+  return { advantageCost, rollCost: advantage ? advantageCost : disadvantageCost };
 }
 
 function getSpeed(tokenDoc) {

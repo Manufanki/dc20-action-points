@@ -17,6 +17,15 @@
       "url": "https://github.com/Manufanki"
     }
   ],
+  "relationships": {
+    "recommends": [
+      {
+        "id": "dc20-combat-system",
+        "type": "module",
+        "reason": "Adds 3d20 and 4d20 advantage tiers with their own AP costs."
+      }
+    ]
+  },
   "esmodules": [
     "scripts/main.js"
   ],

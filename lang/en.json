@@ -9,6 +9,7 @@
     "Linked": "Linked: shares HP and AP with the original combatant",
     "Move": "Movement",
     "OverSpeedMove": "Moving beyond speed",
+    "Advantage": "Advantage",
     "Notifications": {
       "NotEnough": "{name}: {action} costs {cost} AP, but only {remaining} AP are left."
     },
@@ -19,7 +20,7 @@
       },
       "AutoConsume": {
         "Name": "Consume AP automatically",
-        "Hint": "Spend AP automatically when a combatant uses an action or bonus action (D&D 5e), or moves during its own turn."
+        "Hint": "Spend AP automatically when a combatant uses an action or bonus action (D&D 5e), makes a roll with advantage, or moves during its own turn."
       },
       "ActionCost": {
         "Name": "AP cost: Action",
@@ -36,6 +37,22 @@
       "OverSpeedCost": {
         "Name": "AP cost: Moving beyond speed",
         "Hint": "Additional AP spent once per turn when the total movement in a combatant's turn exceeds its speed."
+      },
+      "AdvantageCost": {
+        "Name": "AP cost: Advantage",
+        "Hint": "AP spent each time a d20 roll is made with Advantage (2d20)."
+      },
+      "DoubleAdvantageCost": {
+        "Name": "AP cost: Double Advantage",
+        "Hint": "AP spent for 3d20 rolls from DC20 Combat System. Requires the dc20-combat-system module."
+      },
+      "TripleAdvantageCost": {
+        "Name": "AP cost: Triple Advantage",
+        "Hint": "AP spent for 4d20 rolls from DC20 Combat System. Requires the dc20-combat-system module."
+      },
+      "DisadvantageCost": {
+        "Name": "AP cost: Disadvantage",
+        "Hint": "AP spent for a roll made with Disadvantage. Replaces the Action or Bonus Action cost."
       }
     }
   }

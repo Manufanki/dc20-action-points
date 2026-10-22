@@ -9,6 +9,7 @@
     "Linked": "Verknüpft: teilt TP und AP mit dem ursprünglichen Kampfteilnehmer",
     "Move": "Bewegung",
     "OverSpeedMove": "Bewegung über die Geschwindigkeit hinaus",
+    "Advantage": "Vorteil",
     "Notifications": {
       "NotEnough": "{name}: {action} kostet {cost} AP, es sind aber nur noch {remaining} AP übrig."
     },
@@ -19,7 +20,7 @@
       },
       "AutoConsume": {
         "Name": "AP automatisch verbrauchen",
-        "Hint": "AP automatisch abziehen, wenn ein Kampfteilnehmer eine Aktion oder Bonusaktion nutzt (D&D 5e) oder sich in seinem Zug bewegt."
+        "Hint": "AP automatisch abziehen, wenn ein Kampfteilnehmer eine Aktion oder Bonusaktion nutzt (D&D 5e), mit Vorteil würfelt oder sich in seinem Zug bewegt."
       },
       "ActionCost": {
         "Name": "AP-Kosten: Aktion",
@@ -36,6 +37,22 @@
       "OverSpeedCost": {
         "Name": "AP-Kosten: Bewegung über Geschwindigkeit",
         "Hint": "Zusätzliche AP, die einmal pro Zug verbraucht werden, wenn die Bewegung im Zug die Geschwindigkeit übersteigt."
+      },
+      "AdvantageCost": {
+        "Name": "AP-Kosten: Vorteil",
+        "Hint": "AP, die jedes Mal verbraucht werden, wenn ein W20-Wurf mit Vorteil (2W20) gewürfelt wird."
+      },
+      "DoubleAdvantageCost": {
+        "Name": "AP-Kosten: Doppelter Vorteil",
+        "Hint": "AP für 3W20-Würfe aus dem DC20 Combat System. Benötigt das Modul dc20-combat-system."
+      },
+      "TripleAdvantageCost": {
+        "Name": "AP-Kosten: Dreifacher Vorteil",
+        "Hint": "AP für 4W20-Würfe aus dem DC20 Combat System. Benötigt das Modul dc20-combat-system."
+      },
+      "DisadvantageCost": {
+        "Name": "AP-Kosten: Nachteil",
+        "Hint": "AP, die für einen Wurf mit Nachteil verbraucht werden. Ersetzt die Kosten für Aktion oder Bonusaktion."
       }
     }
   }
